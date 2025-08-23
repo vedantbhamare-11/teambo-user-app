@@ -8,18 +8,23 @@ import {
   Pressable,
 } from "react-native";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
 const ICON_COLOR = "#4686f5";
+
+type NavbarProps = {
+  onFabPress?: () => void;
+  onTabPress?: (idx: number) => void;
+  activeIndex?: number;
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+};
 
 const Navbar = ({
   onFabPress,
   onTabPress,
   activeIndex = 0,
-}: {
-  onFabPress?: () => void;
-  onTabPress?: (idx: number) => void;
-  activeIndex?: number;
-}) => {
+  navigation,
+}: NavbarProps) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleFabPress = () => {
@@ -31,8 +36,10 @@ const Navbar = ({
 
   const handleOptionSelect = (option: string) => {
     setModalVisible(false);
-    // Handle option selection logic, e.g., navigate or open form
-    console.log("Selected:", option);
+    if (option === "Create Task") {
+      navigation.navigate("CreateTask");
+    }
+    // You can add navigation for "Create Category" if needed
   };
 
   return (
