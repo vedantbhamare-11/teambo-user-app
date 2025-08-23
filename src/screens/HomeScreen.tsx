@@ -8,9 +8,12 @@ import {
   Image,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import CategoryCard from "../assets/components/CategoryCard";
 import TaskCard from "../assets/components/TaskCard";
 import Navbar from "../assets/components/Navbar";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../navigation/types";
 
 const categories = [
   {
@@ -81,8 +84,12 @@ const HomeScreen = () => {
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [showAllTasks, setShowAllTasks] = useState(false);
 
-  const displayedCategories = showAllCategories ? categories : categories.slice(0, 2);
+  const displayedCategories = showAllCategories
+    ? categories
+    : categories.slice(0, 2);
   const displayedTasks = showAllTasks ? tasks : tasks.slice(0, 3);
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, "Home">>();
 
   return (
     <View style={styles.container}>
@@ -111,7 +118,9 @@ const HomeScreen = () => {
 
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionHeader}>Categories</Text>
-          <TouchableOpacity onPress={() => setShowAllCategories(!showAllCategories)}>
+          <TouchableOpacity
+            onPress={() => setShowAllCategories(!showAllCategories)}
+          >
             <Text style={styles.linkText}>
               {showAllCategories ? "Show Less" : "View All"}
             </Text>
@@ -123,43 +132,57 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           style={styles.categoryRow}
         >
-          {displayedCategories.map(({ title, subtitle, progressPercent, memberAvatars, memberCount, backgroundColor }) => (
-            <CategoryCard
-              key={title}
-              title={title}
-              subtitle={subtitle}
-              progressPercent={progressPercent}
-              memberAvatars={memberAvatars}
-              memberCount={memberCount}
-              backgroundColor={backgroundColor}
-            />
-          ))}
+          {displayedCategories.map(
+            ({
+              title,
+              subtitle,
+              progressPercent,
+              memberAvatars,
+              memberCount,
+              backgroundColor,
+            }) => (
+              <CategoryCard
+                key={title}
+                title={title}
+                subtitle={subtitle}
+                progressPercent={progressPercent}
+                memberAvatars={memberAvatars}
+                memberCount={memberCount}
+                backgroundColor={backgroundColor}
+              />
+            )
+          )}
         </ScrollView>
 
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionHeader}>My Task</Text>
-          <TouchableOpacity onPress={() => setShowAllTasks(!showAllTasks)}>
+          <TouchableOpacity
+            onPress={() => setShowAllTasks(!showAllTasks)}
+          >
             <Text style={styles.linkText}>
               {showAllTasks ? "Show Less" : "View All"}
             </Text>
           </TouchableOpacity>
         </View>
 
-        {displayedTasks.map(({ title, subtitle, time, status }, index) => (
-          <TaskCard
-            key={`${title}-${index}`}
-            title={title}
-            subtitle={subtitle}
-            time={time}
-            status={status}
-          />
-        ))}
+        {displayedTasks.map(
+          ({ title, subtitle, time, status }, index) => (
+            <TaskCard
+              key={`${title}-${index}`}
+              title={title}
+              subtitle={subtitle}
+              time={time}
+              status={status}
+            />
+          )
+        )}
       </ScrollView>
 
       <Navbar
-        onFabPress={() => { /* handle new task */ }}
-        onTabPress={(idx) => { /* handle tab navigation */ }}
+        onFabPress={() => {}}
+        onTabPress={(idx) => {}}
         activeIndex={0}
+        navigation={navigation}
       />
     </View>
   );
@@ -206,7 +229,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 6,
   },
-  sectionHeader: { fontWeight: "600", fontSize: 18, color: "#22223b", marginBottom: 6 },
+  sectionHeader: {
+    fontWeight: "600",
+    fontSize: 18,
+    color: "#22223b",
+    marginBottom: 6,
+  },
   linkText: { color: "#6078ea", fontWeight: "500", fontSize: 14 },
   categoryRow: { flexDirection: "row", paddingLeft: 18, marginBottom: 14 },
 });
