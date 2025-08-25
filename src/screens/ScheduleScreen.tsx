@@ -11,140 +11,181 @@ import Navbar from "../assets/components/Navbar";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RootStackParamList } from "../navigation/types";
+import CalendarStrip from "react-native-calendar-strip";
+import moment from "moment";
 
-// For stack navigator screens
 type ScheduleScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "Schedule"
 >;
 
-const WEEK_DAYS = [
-  { day: "Thu", date: 26 },
-  { day: "Fri", date: 27 },
-  { day: "Sat", date: 28 },
-  { day: "Sun", date: 29 },
-  { day: "Mon", date: 30 },
-  { day: "Tue", date: 31 },
-  { day: "Wed", date: 1 },
-];
+type Event = {
+  hour: string;
+  title: string;
+  time: string;
+  active?: boolean;
+};
 
-const SCHEDULES = [
-  {
-    hour: "08 AM",
-    title: "Continue Project",
-    time: "08:00 - 11:00 am",
-    active: true,
-  },
-  {
-    hour: "09 AM",
-    title: "Read a book about UI",
-    time: "09:00 - 11:00 AM",
-  },
-  {
-    hour: "12 PM",
-    title: "Meeting With Client",
-    time: "12:00 - 13:30 pm",
-  },
-  {
-    hour: "13 PM",
-    title: "Hangout with friends",
-    time: "12:00 - 13:30 pm",
-  },
-  {
-    hour: "15 PM",
-    title: "Course UI Design",
-    time: "15:00 - 16:00 PM",
-  },
-  {
-    hour: "16 PM",
-    title: "Coffe Break",
-    time: "16:00 - 17:00 PM",
-  },
-  {
-    hour: "17 PM",
-    title: "Dinner with Family",
-    time: "17:00 - 18:30 PM",
-  },
-];
+type ScheduleData = Record<string, Event[]>; // Key: date string, Value: list of events
+
+const INITIAL_SCHEDULES: ScheduleData = {
+  // Today's date
+  [moment().format("YYYY-MM-DD")]: [
+    {
+      hour: "08 AM",
+      title: "Continue Project",
+      time: "08:00 - 11:00 am",
+      active: true,
+    },
+    {
+      hour: "09 AM",
+      title: "Read a book about UI",
+      time: "09:00 - 11:00 AM",
+    },
+    {
+      hour: "12 PM",
+      title: "Meeting With Client",
+      time: "12:00 - 13:30 pm",
+    },
+    {
+      hour: "13 PM",
+      title: "Hangout with friends",
+      time: "12:00 - 13:30 pm",
+    },
+    {
+      hour: "15 PM",
+      title: "Course UI Design",
+      time: "15:00 - 16:00 PM",
+    },
+    {
+      hour: "16 PM",
+      title: "Coffe Break",
+      time: "16:00 - 17:00 PM",
+    },
+    {
+      hour: "17 PM",
+      title: "Dinner with Family",
+      time: "17:00 - 18:30 PM",
+    },
+  ],
+  // Another date, e.g., tomorrow
+  [moment().add(1, "day").format("YYYY-MM-DD")]: [
+    {
+      hour: "09 AM",
+      title: "Morning Yoga",
+      time: "09:00 - 10:00 AM",
+      active: true,
+    },
+    {
+      hour: "12 PM",
+      title: "Lunch with Paul",
+      time: "12:00 - 13:00 PM",
+    },
+  ],
+};
 
 const ScheduleScreen = () => {
-  const [selectedDay, setSelectedDay] = useState(4); // Highlight Monday
+  const [selectedDate, setSelectedDate] = useState(moment());
+  const [scheduleData, setScheduleData] =
+    useState<ScheduleData>(INITIAL_SCHEDULES);
   const navigation = useNavigation<ScheduleScreenNavigationProp>();
+
+  // Format date to yyyy-mm-dd for object keys
+  const selKey = selectedDate.format("YYYY-MM-DD");
+  const events = scheduleData[selKey] || [];
 
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        {/* Week Bar */}
-        <View style={styles.weekRow}>
-          {WEEK_DAYS.map((day, idx) => (
-            <TouchableOpacity
-              key={day.day}
-              style={[
-                styles.weekItem,
-                idx === selectedDay && styles.weekActive,
-              ]}
-              onPress={() => setSelectedDay(idx)}
-              activeOpacity={0.7}
-            >
-              <Text
-                style={[
-                  styles.weekDay,
-                  idx === selectedDay && styles.weekActiveText,
-                ]}
-              >
-                {day.day}
-              </Text>
-              <Text
-                style={[
-                  styles.weekDate,
-                  idx === selectedDay && styles.weekActiveText,
-                ]}
-              >
-                {day.date}
-              </Text>
-            </TouchableOpacity>
-          ))}
+        {/* Horizontal Calendar Strip */}
+        <CalendarStrip
+          scrollable
+          style={styles.calendarStrip}
+          selectedDate={selectedDate}
+          onDateSelected={(date) => setSelectedDate(date)}
+          calendarColor="#fff"
+          calendarHeaderStyle={{ display: "none" }}
+          dateNumberStyle={{
+            color: "#888aad",
+            fontSize: 16,
+            fontWeight: "700",
+          }}
+          dateNameStyle={{ color: "#888aad", fontSize: 13, fontWeight: "500" }}
+          highlightDateNumberStyle={{ color: "#fff" }}
+          highlightDateNameStyle={{ color: "#fff" }}
+          highlightDateContainerStyle={{
+            backgroundColor: "#4686f5",
+            borderRadius: 12,
+          }}
+          iconLeftStyle={{ display: "none" }}
+          iconRightStyle={{ display: "none" }}
+          daySelectionAnimation={{
+            type: "background",
+            duration: 200,
+            highlightColor: "#4686f5",
+          }}
+        />
+
+        <View style={styles.separatorContainer}>
+          <View style={styles.separatorLine} />
         </View>
 
-        {/* Schedule List */}
-        <FlatList
-          data={SCHEDULES}
-          keyExtractor={(_, i) => `${i}`}
-          contentContainerStyle={{ paddingBottom: 120 }}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View style={styles.itemRow}>
-              <Text style={styles.hourText}>{item.hour}</Text>
-              <View style={[styles.card, item.active && styles.activeCard]}>
-                <Text
-                  style={[
-                    styles.cardTitle,
-                    item.active && styles.activeCardTitle,
-                  ]}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  style={[
-                    styles.cardTime,
-                    item.active && styles.activeCardTime,
-                  ]}
-                >
-                  {item.time}
-                </Text>
+        {/* No Events Message or List */}
+        {events.length === 0 ? (
+          <View style={styles.noEventsContainer}>
+            <Text style={styles.noEventsText}>No events for this day</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={events}
+            keyExtractor={(_, i) => `${i}`}
+            contentContainerStyle={{ paddingBottom: 120 }}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View style={styles.itemRow}>
+                <Text style={styles.hourText}>{item.hour}</Text>
+                <View style={[styles.card, item.active && styles.activeCard]}>
+                  <Text
+                    style={[
+                      styles.cardTitle,
+                      item.active && styles.activeCardTitle,
+                    ]}
+                  >
+                    {item.title}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.cardTime,
+                      item.active && styles.activeCardTime,
+                    ]}
+                  >
+                    {item.time}
+                  </Text>
+                </View>
               </View>
-            </View>
-          )}
-        />
+            )}
+          />
+        )}
       </View>
       <Navbar
         activeIndex={1}
         onTabPress={(idx) => {
           if (idx === 0) navigation.navigate("Home");
-          // handle other tabs...
         }}
         onFabPress={() => {
-          navigation.navigate("CreateTask");
+          // Example of adding an event to the selected day
+          setScheduleData((sd) => ({
+            ...sd,
+            [selKey]: [
+              ...(sd[selKey] || []),
+              {
+                hour: "08 AM",
+                title: "New Event",
+                time: "08:00 - 09:00 AM",
+                active: false,
+              },
+            ],
+          }));
         }}
         navigation={navigation}
       />
@@ -160,66 +201,42 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: "#f9fafd",
   },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-    marginTop: 6,
+  calendarStrip: {
+    height: 94,
+    paddingTop: 8,
+    paddingBottom: 8,
+    backgroundColor: "#f9fafd",
   },
-  arrowBack: {
-    padding: 4,
-    marginRight: 7,
-  },
-  headerTitle: {
-    fontWeight: "700",
-    fontSize: 19,
-    color: "#22223b",
-    textAlign: "center",
+  noEventsContainer: {
     flex: 1,
-  },
-  weekRow: {
-    flexDirection: "row",
-    borderRadius: 18,
-    height: 58,
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-    marginHorizontal: 4,
-    backgroundColor: "#fff",
-    marginBottom: 16,
-    paddingTop: 5,
-    paddingBottom: 2,
-    elevation: 2,
-  },
-  weekItem: {
-    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    borderRadius: 12,
-    paddingVertical: 6,
-    marginHorizontal: 2,
   },
-  weekDay: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#888aad",
-    marginBottom: 0,
-  },
-  weekDate: {
-    fontSize: 15,
-    fontWeight: "700",
+  noEventsText: {
     color: "#bcbcd9",
-  },
-  weekActive: {
-    backgroundColor: "#4686f5",
-    borderRadius: 12,
-  },
-  weekActiveText: {
-    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 36,
   },
   itemRow: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     marginBottom: 18,
   },
+  separatorContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 16,
+    marginHorizontal: 30,
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    width: "80%",
+    backgroundColor: "#384b84ff", // soft light gray separator
+  },
+
   hourText: {
     width: 44,
     fontSize: 13,
