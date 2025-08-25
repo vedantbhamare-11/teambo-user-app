@@ -48,7 +48,12 @@ const CreateTaskScreen = () => {
     month: "long",
     day: "numeric",
   });
-  const formatTime = (d: Date) => d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: true });
+  const formatTime = (d: Date) =>
+    d.toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
 
   // ---- Handlers
   const onChangeDate = (event: any, selectedDate?: Date) => {
@@ -68,7 +73,9 @@ const CreateTaskScreen = () => {
   const handleAddCategory = () => {
     if (
       category.trim() &&
-      !allTags.some((t) => t.label.toLowerCase() === category.trim().toLowerCase())
+      !allTags.some(
+        (t) => t.label.toLowerCase() === category.trim().toLowerCase()
+      )
     ) {
       setAllTags((tags) => [
         ...tags,
@@ -88,11 +95,10 @@ const CreateTaskScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
-      {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Feather name="arrow-left" size={24} color="#22223b" />
-      </TouchableOpacity>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 30 }}
+    >
       {/* Title */}
       <Text style={styles.label}>Title</Text>
       <TextInput
@@ -202,9 +208,7 @@ const CreateTaskScreen = () => {
               style={[
                 styles.tagText,
                 { color: tag.textColor || "#63676e" },
-                selectedTag === tag.label
-                  ? { fontWeight: "bold" }
-                  : null,
+                selectedTag === tag.label ? { fontWeight: "bold" } : null,
               ]}
             >
               {tag.label}
