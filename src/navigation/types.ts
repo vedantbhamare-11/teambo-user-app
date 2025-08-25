@@ -3,5 +3,6 @@ export type RootStackParamList = {
   Home: undefined;
   CreateTask: undefined;
   Schedule: undefined;
+  Profile: undefined;
   // add other routes here, if any
 };

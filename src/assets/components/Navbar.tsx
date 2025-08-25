@@ -86,7 +86,10 @@ const Navbar = ({
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onTabPress?.(3)}
+            onPress={() => {
+              onTabPress?.(3);
+              navigation.navigate("Profile");
+            }}
             style={styles.iconWrap}
           >
             <Feather
