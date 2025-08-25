@@ -13,10 +13,10 @@ import { RootStackParamList } from "../../navigation/types";
 const ICON_COLOR = "#4686f5";
 
 type NavbarProps = {
+  navigation: StackNavigationProp<RootStackParamList>;
   onFabPress?: () => void;
   onTabPress?: (idx: number) => void;
   activeIndex?: number;
-  navigation: StackNavigationProp<RootStackParamList, "Home">;
 };
 
 const Navbar = ({
@@ -57,7 +57,13 @@ const Navbar = ({
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onTabPress?.(1)}
+            onPress={() => {
+              // Option 1: Call parent's onTabPress if logic is in parent
+              onTabPress?.(1);
+
+              // Option 2: Navigate directly if you want to handle it here:
+              navigation.navigate("Schedule");
+            }}
             style={styles.iconWrap}
           >
             <Feather
