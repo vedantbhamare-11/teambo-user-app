@@ -63,7 +63,7 @@ const Navbar = ({
             style={styles.iconWrap}
           >
             <MaterialCommunityIcons
-              name="notebook-outline"
+              name="bell-outline"
               size={24}
               color={activeIndex === 2 ? ICON_COLOR : "#a0b7df"}
             />

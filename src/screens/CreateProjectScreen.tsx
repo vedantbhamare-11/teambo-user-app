@@ -1,4 +1,4 @@
- import React, { useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -16,12 +16,7 @@ const collaboratorsList = [
   "Charlie Davis",
   "Daniela Edwards",
 ];
-const clientsList = [
-  "Acme Corp",
-  "Globex Inc",
-  "Soylent Corp",
-  "Initech",
-];
+const clientsList = ["Acme Corp", "Globex Inc", "Soylent Corp", "Initech"];
 
 // Simple searchable dropdown component
 const SearchableDropdown = ({
@@ -88,7 +83,10 @@ const CreateProjectScreen = () => {
   // Add your submit handler here
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 30 }}
+    >
       {/* Project Name */}
       <Text style={styles.label}>Project Name</Text>
       <TextInput
