@@ -25,23 +25,6 @@ const Navbar = ({
   activeIndex = 0,
   navigation,
 }: NavbarProps) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleFabPress = () => {
-    setModalVisible(true);
-    if (onFabPress) onFabPress();
-  };
-
-  const handleClose = () => setModalVisible(false);
-
-  const handleOptionSelect = (option: string) => {
-    setModalVisible(false);
-    if (option === "Create Task") {
-      navigation.navigate("CreateTask");
-    }
-    // You can add navigation for "Create Category" if needed
-  };
-
   return (
     <>
       <View style={styles.navContainer}>
@@ -99,36 +82,10 @@ const Navbar = ({
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.fabButton} onPress={handleFabPress}>
+        <TouchableOpacity style={styles.fabButton} onPress={onFabPress}>
           <AntDesign name="plus" size={30} color="#fff" />
         </TouchableOpacity>
       </View>
-
-      {/* Modal Popup */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleClose}
-      >
-        <Pressable style={styles.modalOverlay} onPress={handleClose}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Create New</Text>
-            <TouchableOpacity
-              style={styles.optionButton}
-              onPress={() => handleOptionSelect("Create Task")}
-            >
-              <Text style={styles.optionText}>Create Task</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.optionButton}
-              onPress={() => handleOptionSelect("Create Category")}
-            >
-              <Text style={styles.optionText}>Create Category</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
-      </Modal>
     </>
   );
 };
@@ -182,42 +139,6 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 8,
     marginBottom: 15,
-  },
-
-  // Modal Styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.35)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    backgroundColor: "#fff",
-    width: 240,
-    borderRadius: 16,
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    marginBottom: 16,
-    color: "#22223b",
-  },
-  optionButton: {
-    width: "100%",
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 12,
-    backgroundColor: "#f0f4f8",
-    marginBottom: 12,
-    alignItems: "center",
-  },
-  optionText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#4686f5",
   },
 });
 
