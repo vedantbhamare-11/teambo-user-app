@@ -1,8 +1,8 @@
-// src/components/CategoryCard.tsx
+// src/components/ProjectCard.tsx
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
-type CategoryCardProps = {
+type ProjectCardProps = {
   title: string;
   subtitle: string;
   progressPercent: number; // 0-100
@@ -12,18 +12,18 @@ type CategoryCardProps = {
   style?: object;
 };
 
-const CategoryCard = ({
+const ProjectCard = ({
   title,
   subtitle,
   memberAvatars = [],
   memberCount,
   style,
-}: CategoryCardProps) => {
+}: ProjectCardProps) => {
   return (
     <View style={[styles.cardContainer, style]}>
       <View style={styles.topSection}>
-        <Text style={styles.categoryTitle}>{title}</Text>
-        <Text style={styles.categorySub}>{subtitle}</Text>
+        <Text style={styles.projectTitle}>{title}</Text>
+        <Text style={styles.projectSub}>{subtitle}</Text>
       </View>
       <View style={styles.bottomSection}>
         <View style={styles.avatarRow}>
@@ -70,13 +70,13 @@ const styles = StyleSheet.create({
     padding: 18,
     paddingBottom: 10,
   },
-  categoryTitle: {
+  projectTitle: {
     fontWeight: "bold",
     fontSize: 15,
     color: "#fff",
     marginBottom: 2,
   },
-  categorySub: {
+  projectSub: {
     color: "rgba(255,255,255,0.7)",
     fontSize: 12,
   },
@@ -119,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryCard;
+export default ProjectCard;

@@ -11,11 +11,11 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import CategoryCard from "../assets/components/CategoryCard";
 import TaskCard from "../assets/components/TaskCard";
 import Navbar from "../assets/components/Navbar";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../navigation/types";
+import ProjectCard from "../assets/components/ProjectCard";
 
 const categories = [
   {
@@ -139,7 +139,7 @@ const HomeScreen = () => {
         </View>
 
         <View style={styles.sectionHeaderRow}>
-          <Text style={styles.sectionHeader}>Categories</Text>
+          <Text style={styles.sectionHeader}>Projects</Text>
           <TouchableOpacity
             onPress={() => setShowAllCategories(!showAllCategories)}
           >
@@ -163,7 +163,7 @@ const HomeScreen = () => {
               memberCount,
               backgroundColor,
             }) => (
-              <CategoryCard
+              <ProjectCard
                 key={title}
                 title={title}
                 subtitle={subtitle}
@@ -277,7 +277,7 @@ const HomeScreen = () => {
               <Text
                 style={{ fontSize: 16, fontWeight: "600", color: "#4686f5" }}
               >
-                Create Category
+                Create Project
               </Text>
             </TouchableOpacity>
           </View>
