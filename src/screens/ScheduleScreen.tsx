@@ -6,6 +6,8 @@ import {
   FlatList,
   TouchableOpacity,
   SafeAreaView,
+  Modal,
+  Pressable,
 } from "react-native";
 import Navbar from "../assets/components/Navbar";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +15,7 @@ import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RootStackParamList } from "../navigation/types";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
+import { TextInput } from "react-native";
 
 type ScheduleScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -89,11 +92,24 @@ const ScheduleScreen = () => {
   const [scheduleData, setScheduleData] =
     useState<ScheduleData>(INITIAL_SCHEDULES);
   const navigation = useNavigation<ScheduleScreenNavigationProp>();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newEvent, setNewEvent] = useState({ hour: "", title: "", time: "" });
 
   // Format date to yyyy-mm-dd for object keys
   const selKey = selectedDate.format("YYYY-MM-DD");
   const events = scheduleData[selKey] || [];
 
+  const addEvent = () => {
+    if (!newEvent.title || !newEvent.hour || !newEvent.time) return;
+
+    setScheduleData((prev) => ({
+      ...prev,
+      [selKey]: [...(prev[selKey] || []), { ...newEvent, active: false }],
+    }));
+
+    setNewEvent({ title: "", hour: "", time: "" });
+    setModalVisible(false);
+  };
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
@@ -172,23 +188,59 @@ const ScheduleScreen = () => {
         onTabPress={(idx) => {
           if (idx === 0) navigation.navigate("Home");
         }}
-        onFabPress={() => {
-          // Example of adding an event to the selected day
-          setScheduleData((sd) => ({
-            ...sd,
-            [selKey]: [
-              ...(sd[selKey] || []),
-              {
-                hour: "08 AM",
-                title: "New Event",
-                time: "08:00 - 09:00 AM",
-                active: false,
-              },
-            ],
-          }));
-        }}
+        onFabPress={() => setModalVisible(true)}
         navigation={navigation}
       />
+
+      <Modal visible={modalVisible} animationType="slide" transparent>
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Create New Event</Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Title"
+              value={newEvent.title}
+              onChangeText={(text) =>
+                setNewEvent((e) => ({ ...e, title: text }))
+              }
+            />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Hour (e.g., 08 AM)"
+              value={newEvent.hour}
+              onChangeText={(text) =>
+                setNewEvent((e) => ({ ...e, hour: text }))
+              }
+            />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Time Range (e.g., 08:00 - 09:00)"
+              value={newEvent.time}
+              onChangeText={(text) =>
+                setNewEvent((e) => ({ ...e, time: text }))
+              }
+            />
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.cancelBtn}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.addBtn} onPress={addEvent}>
+                <Text style={styles.addText}>Add</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -276,6 +328,64 @@ const styles = StyleSheet.create({
   },
   activeCardTime: {
     color: "#eef2f9",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.25)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    width: "85%",
+    borderRadius: 16,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 20,
+    color: "#222",
+  },
+  input: {
+    width: "100%",
+    backgroundColor: "#f0f4f8",
+    borderRadius: 10,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    fontSize: 16,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 10,
+  },
+  cancelBtn: {
+    flex: 1,
+    backgroundColor: "#eee",
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginRight: 10,
+    alignItems: "center",
+  },
+  cancelText: {
+    color: "#444",
+    fontWeight: "600",
+  },
+  addBtn: {
+    flex: 1,
+    backgroundColor: "#437cfc",
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginLeft: 10,
+    alignItems: "center",
+  },
+  addText: {
+    color: "#fff",
+    fontWeight: "700",
   },
 });
 
