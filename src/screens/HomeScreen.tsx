@@ -6,6 +6,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Modal,
+  Pressable,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -83,13 +85,33 @@ const tasks = [
 const HomeScreen = () => {
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [showAllTasks, setShowAllTasks] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const displayedCategories = showAllCategories
     ? categories
     : categories.slice(0, 2);
   const displayedTasks = showAllTasks ? tasks : tasks.slice(0, 3);
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, "Home">>();
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, "Home">>();
+  const handleTabPress = (idx: number) => {
+    switch (idx) {
+      case 0:
+        navigation.navigate("Home");
+        break;
+      case 1:
+        navigation.navigate("Schedule");
+        break;
+      case 2:
+        navigation.navigate("CreateTask");
+        break;
+      case 3:
+        navigation.navigate("Profile");
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -156,34 +178,111 @@ const HomeScreen = () => {
 
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionHeader}>My Task</Text>
-          <TouchableOpacity
-            onPress={() => setShowAllTasks(!showAllTasks)}
-          >
+          <TouchableOpacity onPress={() => setShowAllTasks(!showAllTasks)}>
             <Text style={styles.linkText}>
               {showAllTasks ? "Show Less" : "View All"}
             </Text>
           </TouchableOpacity>
         </View>
 
-        {displayedTasks.map(
-          ({ title, subtitle, time, status }, index) => (
-            <TaskCard
-              key={`${title}-${index}`}
-              title={title}
-              subtitle={subtitle}
-              time={time}
-              status={status}
-            />
-          )
-        )}
+        {displayedTasks.map(({ title, subtitle, time, status }, index) => (
+          <TaskCard
+            key={`${title}-${index}`}
+            title={title}
+            subtitle={subtitle}
+            time={time}
+            status={status}
+          />
+        ))}
       </ScrollView>
 
       <Navbar
-        onFabPress={() => {}}
-        onTabPress={(idx) => {}}
-        activeIndex={0}
         navigation={navigation}
+        activeIndex={0}
+        onFabPress={() => setModalVisible(true)}
+        onTabPress={handleTabPress}
       />
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <Pressable
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.35)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => setModalVisible(false)}
+        >
+          <View
+            style={{
+              backgroundColor: "#fff",
+              width: 240,
+              borderRadius: 16,
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "700",
+                marginBottom: 16,
+                color: "#22223b",
+              }}
+            >
+              Create New
+            </Text>
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                paddingVertical: 12,
+                paddingHorizontal: 8,
+                borderRadius: 12,
+                backgroundColor: "#f0f4f8",
+                marginBottom: 12,
+                alignItems: "center",
+              }}
+              onPress={() => {
+                navigation.navigate("CreateTask");
+                setModalVisible(false);
+              }}
+            >
+              <Text
+                style={{ fontSize: 16, fontWeight: "600", color: "#4686f5" }}
+              >
+                Create Task
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                paddingVertical: 12,
+                paddingHorizontal: 8,
+                borderRadius: 12,
+                backgroundColor: "#f0f4f8",
+                marginBottom: 12,
+                alignItems: "center",
+              }}
+              onPress={() => {
+                // Create Category logic here
+                setModalVisible(false);
+              }}
+            >
+              <Text
+                style={{ fontSize: 16, fontWeight: "600", color: "#4686f5" }}
+              >
+                Create Category
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
