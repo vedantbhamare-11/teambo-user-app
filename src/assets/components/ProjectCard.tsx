@@ -4,28 +4,31 @@ import { View, Text, StyleSheet, Image } from "react-native";
 
 type ProjectCardProps = {
   title: string;
-  subtitle: string;
-  progressPercent: number; // 0-100
+  description: string;
   memberAvatars?: string[]; // array of avatar image URIs
   memberCount?: number; // e.g. 8
-  backgroundColor?: string; // solid background color
+  clientName?: string;
   style?: object;
 };
 
 const ProjectCard = ({
   title,
-  subtitle,
+  description,
   memberAvatars = [],
   memberCount,
+  clientName,
   style,
 }: ProjectCardProps) => {
   return (
     <View style={[styles.cardContainer, style]}>
       <View style={styles.topSection}>
         <Text style={styles.projectTitle}>{title}</Text>
-        <Text style={styles.projectSub}>{subtitle}</Text>
+        <Text style={styles.projectDescription}>{description}</Text>
       </View>
       <View style={styles.bottomSection}>
+        <View>
+          <Text style={styles.clientName}>{clientName}</Text>
+        </View>
         <View style={styles.avatarRow}>
           {memberAvatars.slice(0, 3).map((uri, idx) => (
             <Image
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginBottom: 2,
   },
-  projectSub: {
+  projectDescription: {
     color: "rgba(255,255,255,0.7)",
     fontSize: 12,
   },
@@ -91,11 +94,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
+    justifyContent: "space-between", // keep space between client name and avatars
   },
   avatarRow: {
     flexDirection: "row",
+    position: "absolute",
+    right: -24,
     alignItems: "center",
-    marginLeft: 10,
+    justifyContent: "flex-end",
   },
   avatar: {
     width: 26,
@@ -104,7 +110,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e3e7ef",
     borderWidth: 2,
     borderColor: "#fff",
-    position: "relative",
     zIndex: 1,
   },
   avatarCount: {
@@ -116,6 +121,11 @@ const styles = StyleSheet.create({
     color: "#22223b",
     fontWeight: "600",
     fontSize: 10,
+  },
+  clientName: {
+    color: "#22223b",
+    fontWeight: "600",
+    fontSize: 12,
   },
 });
 
