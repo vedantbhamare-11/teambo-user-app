@@ -20,38 +20,35 @@ import ProjectCard from "../assets/components/ProjectCard";
 const categories = [
   {
     title: "Web Development",
-    subtitle: "12 Projects",
-    progressPercent: 60,
+    description: "Demo Projects",
     memberAvatars: [
       "https://randomuser.me/api/portraits/men/10.jpg",
       "https://randomuser.me/api/portraits/women/11.jpg",
       "https://randomuser.me/api/portraits/men/12.jpg",
     ],
     memberCount: 8,
-    backgroundColor: "#17ead9",
+    clientName: "Microsoft",
   },
   {
     title: "Web Design",
-    subtitle: "24 Projects",
-    progressPercent: 45,
+    description: "Demo Projects",
     memberAvatars: [
       "https://randomuser.me/api/portraits/women/13.jpg",
       "https://randomuser.me/api/portraits/men/14.jpg",
       "https://randomuser.me/api/portraits/women/15.jpg",
     ],
     memberCount: 13,
-    backgroundColor: "#6078ea",
+    clientName: "Google",
   },
   {
     title: "UI/UX",
-    subtitle: "10 Projects",
-    progressPercent: 75,
+    description: "10 Projects",
     memberAvatars: [
       "https://randomuser.me/api/portraits/men/20.jpg",
       "https://randomuser.me/api/portraits/women/21.jpg",
     ],
     memberCount: 6,
-    backgroundColor: "#ff8a65",
+    clientName: "Google",
   },
 ];
 
@@ -157,20 +154,18 @@ const HomeScreen = () => {
           {displayedCategories.map(
             ({
               title,
-              subtitle,
-              progressPercent,
+              description,
               memberAvatars,
               memberCount,
-              backgroundColor,
+              clientName,
             }) => (
               <ProjectCard
                 key={title}
                 title={title}
-                subtitle={subtitle}
-                progressPercent={progressPercent}
+                description={description}
+                clientName={clientName}
                 memberAvatars={memberAvatars}
                 memberCount={memberCount}
-                backgroundColor={backgroundColor}
               />
             )
           )}
@@ -270,7 +265,7 @@ const HomeScreen = () => {
                 alignItems: "center",
               }}
               onPress={() => {
-                // Create Category logic here
+                navigation.navigate("CreateProject");
                 setModalVisible(false);
               }}
             >
