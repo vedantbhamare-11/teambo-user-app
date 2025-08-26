@@ -36,7 +36,7 @@ export default function App() {
           options={{ headerShown: true }} // Hide header for Home as well
         />
 
-         <Stack.Screen
+        <Stack.Screen
           name="Profile"
           component={ProfileScreen}
           options={{ headerShown: true }} // Hide header for Home as well
