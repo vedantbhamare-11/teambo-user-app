@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
+import { RootStackParamList } from "../navigation/types";
 const ICON_COLOR = "#4686f5";
 
 type NavbarProps = {

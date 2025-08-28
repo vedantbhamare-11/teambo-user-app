@@ -5,8 +5,8 @@ import { View, Text, StyleSheet, Image } from "react-native";
 type ProjectCardProps = {
   title: string;
   description: string;
-  memberAvatars?: string[]; // array of avatar image URIs
-  memberCount?: number; // e.g. 8
+  memberAvatars?: string[];
+  memberCount?: number;
   clientName?: string;
   style?: object;
 };
@@ -37,7 +37,6 @@ const ProjectCard = ({
               style={[styles.avatar, { left: idx * -12 }]}
             />
           ))}
-          // Inside the component JSX, update avatarCount container style:
           {memberCount && memberCount > 3 && (
             <View
               style={[

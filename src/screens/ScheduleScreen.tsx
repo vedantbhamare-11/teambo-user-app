@@ -9,7 +9,7 @@ import {
   Modal,
   Pressable,
 } from "react-native";
-import Navbar from "../assets/components/Navbar";
+import Navbar from "../components/Navbar";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RootStackParamList } from "../navigation/types";

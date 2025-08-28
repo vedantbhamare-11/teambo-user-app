@@ -11,11 +11,11 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import TaskCard from "../assets/components/TaskCard";
-import Navbar from "../assets/components/Navbar";
+import TaskCard from "../components/TaskCard";
+import Navbar from "../components/Navbar";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../navigation/types";
-import ProjectCard from "../assets/components/ProjectCard";
+import ProjectCard from "../components/ProjectCard";
 
 const categories = [
   {
