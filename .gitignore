@@ -2,9 +2,11 @@
 
 # dependencies
 node_modules/
+.env.local/
 
 # Expo
 .expo/
+.expo-shared/
 dist/
 web-build/
 expo-env.d.ts
@@ -35,3 +37,10 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+app-example
+
+/android
+/ios
+.vscode
+
